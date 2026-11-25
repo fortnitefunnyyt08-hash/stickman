@@ -1,0 +1,96 @@
+# ─────────────────────────────────────────────────────────────
+#  STICKMAN SERIES: shared config for every episode.
+#  Change things here and every episode stays consistent.
+# ─────────────────────────────────────────────────────────────
+
+video:
+  width: 1080
+  height: 1920
+  fps: 30
+  crf: 20            # lower = better quality, bigger file
+  preset: medium
+
+# ── Voices ───────────────────────────────────────────────────
+# voice_sample: the cleaned recording used to clone the voice (git-ignored).
+# voice_id:     filled in automatically by `python -m stickman.clone` and
+#               saved to config/voices.local.yaml (git-ignored). You can also
+#               paste an ElevenLabs library voice ID here directly.
+# voice_from:   reuse another character's cloned voice (with its own pitch).
+# pitch:        semitones applied after generation. For Kai, the pitch drops
+#               as he "grows up": pitch_start + pitch_step * (episode - 1).
+# placeholder:  espeak-ng robot voice used until a real voice is available.
+tts:
+  provider: elevenlabs
+  model_id: eleven_multilingual_v2
+  output_format: mp3_44100_128
+  api_base: https://api.elevenlabs.io
+
+characters:
+  kai:
+    name: Kai
+    voice_sample: assets/voice_samples/kai_clean.wav
+    pitch_start: 5.0
+    pitch_step: -0.5
+    formant: shifted          # "shifted" = squeakier/babyish, "preserved" = more grown-up
+    settings: {stability: 0.4, similarity_boost: 0.8, style: 0.6, use_speaker_boost: true}
+    placeholder: {voice: en-gb-x-gbclan, pitch: 35, speed: 150}
+  mam:
+    name: Mam
+    voice_sample: assets/voice_samples/mam_clean.wav
+    pitch: 0
+    settings: {stability: 0.45, similarity_boost: 0.8, style: 0.5, use_speaker_boost: true}
+    placeholder: {voice: en-gb-x-gbclan+f3, pitch: 30, speed: 150}
+  tariq:
+    name: Tariq
+    voice_sample: assets/voice_samples/tariq_clean.wav
+    pitch: 0
+    settings: {stability: 0.55, similarity_boost: 0.8, style: 0.3, use_speaker_boost: true}
+    placeholder: {voice: en-gb-x-gbclan+m3, pitch: 25, speed: 140}
+  midwife:
+    name: Midwife
+    voice_from: mam
+    pitch: 2
+    settings: {stability: 0.5, similarity_boost: 0.7, style: 0.4, use_speaker_boost: true}
+    placeholder: {voice: en-gb-x-gbclan+f2, pitch: 55, speed: 165}
+  pasty_lad:
+    name: Pasty Lad
+    voice_from: tariq
+    pitch: -2
+    settings: {stability: 0.5, similarity_boost: 0.7, style: 0.4, use_speaker_boost: true}
+    placeholder: {voice: en-gb-x-gbclan+m1, pitch: 20, speed: 140}
+
+# ── Look ─────────────────────────────────────────────────────
+style:
+  ink: "#151517"
+  figure: "#fbfbf8"           # white stickmen
+  # ink is the outline + face colour
+  grade: {tint: "#6f7a86", amount: 0.10}   # grim grey-blue wash over everything
+  vignette: 0.45
+  grain: 0.05
+
+# ── Captions (TikTok style, word by word) ────────────────────
+captions:
+  font: /usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf
+  size: 92
+  y: 0.40                 # fraction of screen height (middle third)
+  max_words: 3            # words on screen at once
+  color: "#ffffff"
+  highlight: "#ffd83d"
+  outline: "#000000"
+  outline_width: 14
+  uppercase: true
+  censor: []              # e.g. ["fuck"] -> "F**K" for platforms that mute swearing
+
+titles:
+  font: /usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf
+  size: 64
+
+# ── Audio mix ────────────────────────────────────────────────
+audio:
+  sample_rate: 44100
+  voice_gain: 1.0
+  sfx_gain: 0.8
+  ambience_gain: 0.45
+  music_gain: 0.16
+  duck: 0.45              # music/ambience level while someone is talking
+  line_gap: 0.25          # default seconds of silence after each line

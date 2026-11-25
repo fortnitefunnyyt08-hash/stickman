@@ -1,2 +1,6 @@
 assets/voice_samples/
 .env
+config/voices.local.yaml
+build/
+__pycache__/
+*.pyc
