@@ -43,6 +43,7 @@ class ShotSet:
         self.spec = yaml.safe_load((self.ep_dir / "shots.yaml").read_text())
         self.out = AI / self.ep_dir.name
         self.style = self.spec.get("style", "").strip()
+        self.retry_rejected = False
 
     # file locations
     def base(self, sid):
@@ -108,6 +109,8 @@ class ShotSet:
         full = (f"{prompt} Keep the exact same composition, framing, background, lighting, colours and every other "
                 f"character exactly as they are.")
         key = hashlib.sha1(base.read_bytes()).hexdigest()
+        if self.retry_rejected and self.mask(sid, name).with_name(self.mask(sid, name).name.replace("_mask.png", "_rejected.txt")).exists():
+            force = True
         st = self._gen(full, [base], out, "9:16", force, extra=key)
         for attempt in range(1, 3):
             if make_mask(base, out, self.mask(sid, name), "talk" if name.startswith("talk_") else "head", face):
@@ -197,7 +200,7 @@ def make_mask(base: Path, var: Path, out: Path, kind: str = "talk", face=None) -
     ring = (outer > 0) & (inner == 0)
     seam = float(d[ring].mean()) if ring.any() else 999.0
     outside = seam / 765
-    ok = bool(region.any()) and seam < 30.0
+    ok = bool(region.any()) and seam < 40.0
     aligned = out.with_name(out.name.replace("_mask.png", "_aligned.png"))
     rej = out.with_name(out.name.replace("_mask.png", "_rejected.txt"))
     if ok:
@@ -238,8 +241,11 @@ def main(argv=None):
     ap = argparse.ArgumentParser()
     ap.add_argument("episode")
     ap.add_argument("--redo", nargs="*", default=[])
+    ap.add_argument("--retry-rejected", action="store_true", help="have another go at mouth variants that failed the check")
     a = ap.parse_args(argv)
-    ShotSet(Path(a.episode)).run(set(a.redo))
+    ss = ShotSet(Path(a.episode))
+    ss.retry_rejected = a.retry_rejected
+    ss.run(set(a.redo))
 
 
 if __name__ == "__main__":

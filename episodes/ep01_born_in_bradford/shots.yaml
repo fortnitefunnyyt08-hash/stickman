@@ -27,7 +27,6 @@ shots:
   # ── BIRTH ─────────────────────────────────────────────────
   - id: b_wide
     scene: birth
-    faces: {midwife: [0.62, 0.48]}   # where each speaker's face is (0..1)
     from: groan1
     refs: [bg:bedroom_v2, char:mam, char:midwife]
     prompt: >-
@@ -36,13 +35,11 @@ shots:
       down, face screwed up straining. The MIDWIFE in blue NHS scrubs and blue gloves kneels on the
       carpet in front of the sheet, facing Mam, cheerfully encouraging with one fist pumped.
       Wide shot showing the whole scene, characters in the lower half.
-    talk: {midwife: "Same picture, change only the midwife's face: her mouth wide open mid-shout, encouraging. Everything else identical."}
     move: [[0.5, 0.6, 1.05], [0.5, 0.62, 1.15]]
 
   - id: b_sit
     scene: birth
     from: sit
-    faces: {kai: [0.4, 0.62]}
     refs: [shot:b_wide, char:kai_vest]
     prompt: >-
       Same room, same lighting and the same characters in the same places as in the first reference picture (the master shot). Keep MAM on the mattress against the wall in her pink dressing gown under the pale blue sheet, and the MIDWIFE in blue scrubs kneeling on the carpet, unless told otherwise. Wholesome family-friendly cartoon. Now KAI (the small white toddler stickman in a white t-shirt vest with a curly tuft, from the
@@ -56,7 +53,7 @@ shots:
   - id: b_face
     scene: birth
     from: hold
-    faces: {kai: [0.5, 0.5]}
+    faces: {kai: [0.47, 0.7]}
     refs: [shot:b_wide, char:kai_vest]
     prompt: >-
       Close-up of KAI (from the Kai reference sheet) sitting on the carpet in this bedroom in his white t-shirt vest: his face and
@@ -69,7 +66,7 @@ shots:
   - id: b_scrabble
     scene: birth
     from: turn
-    faces: {kai: [0.3, 0.55]}
+    faces: {kai: [0.38, 0.59]}
     refs: [shot:b_wide, char:kai_vest]
     prompt: >-
       Same room, same lighting and the same characters in the same places as in the first reference picture (the master shot). Keep MAM on the mattress against the wall in her pink dressing gown under the pale blue sheet, and the MIDWIFE in blue scrubs kneeling on the carpet, unless told otherwise. Wholesome family-friendly cartoon. Now KAI in his white t-shirt vest stands on the carpet beside the mattress, one hand on his hip,
@@ -81,7 +78,7 @@ shots:
   - id: b_mam
     scene: birth
     from: norefunds
-    faces: {mam: [0.5, 0.42]}
+    faces: {mam: [0.22, 0.57]}
     refs: [shot:b_wide, char:mam]
     prompt: >-
       Close-up of MAM from this bedroom: propped against the bedroom wall on the mattress in her pink
@@ -94,20 +91,24 @@ shots:
   - id: b_dangle
     scene: birth
     from: lift
-    faces: {kai: [0.65, 0.5]}
+    faces: {kai: [0.4, 0.5]}
     refs: [shot:b_wide, char:kai_vest, char:midwife]
     prompt: >-
-      Same room, same lighting and the same characters in the same places as in the first reference picture (the master shot). Keep MAM on the mattress against the wall in her pink dressing gown under the pale blue sheet, and the MIDWIFE in blue scrubs kneeling on the carpet, unless told otherwise. Wholesome family-friendly cartoon. Except now the MIDWIFE has stood up on the left and holds out one arm, her hand pinching the top
-      of KAI's nappy so he hangs in the air at her side. KAI, a separate small character in his own white
-      t-shirt vest, dangles with legs hanging and arms folded, glaring at the camera. MAM is still on the
-      mattress behind them, watching the TV.
+      Same bedroom and lighting as the first reference picture. Exactly three characters, each
+      appearing only once: (1) MAM, lying on the mattress against the wall on the right in her pink
+      dressing gown under the pale blue sheet, watching the TV; (2) the MIDWIFE in blue scrubs, now
+      standing on the left, with her right arm raised high and stretched out in front of her;
+      (3) KAI, the small white toddler stickman in his white t-shirt vest, hanging in mid-air from the
+      midwife's raised hand, which pinches the back of his nappy, so his feet are well off the floor,
+      legs dangling, arms folded, glaring at the camera. There is only one Mam in the picture.
+      Wholesome family-friendly cartoon.
     talk: {kai: "Same cartoon picture, change only the small character's mouth so it is open as if talking. Everything else identical."}
-    move: [[0.5, 0.5, 1.05], [0.52, 0.48, 1.15]]
+    move: [[0.5, 0.48, 1.05], [0.52, 0.46, 1.15]]
 
   # ── ERRAND ────────────────────────────────────────────────
   - id: e_wide
     scene: errand
-    faces: {mam: [0.3, 0.46]}   # where each speaker's face is (0..1)
+    faces: {mam: [0.37, 0.49]}
     from: card
     refs: [bg:living_room_v3, char:mam, char:kai_vest]
     prompt: >-
@@ -120,7 +121,7 @@ shots:
   - id: e_kai
     scene: errand
     from: onehour
-    faces: {kai: [0.4, 0.6]}
+    faces: {kai: [0.15, 0.68]}
     refs: [bg:living_room_v3, char:kai_vest, char:mam]
     prompt: >-
       This living room. In the foreground the cartoon stickman character KAI in his white t-shirt
@@ -133,7 +134,7 @@ shots:
 
   - id: e_mam
     scene: errand
-    faces: {mam: [0.55, 0.48]}   # where each speaker's face is (0..1)
+    faces: {mam: [0.17, 0.5]}
     from: brother
     refs: [bg:living_room_v3, char:mam, char:kai_vest]
     prompt: >-
@@ -157,7 +158,7 @@ shots:
   - id: e_go
     scene: errand
     from: climb
-    faces: {kai: [0.6, 0.6]}
+    faces: {kai: [0.6, 0.66]}
     refs: [shot:e_wide, char:kai_vest]
     prompt: >-
       Same living room, same lighting and the same characters as in the first reference picture (the master shot): MAM stays slouched on the brown sofa in her pink dressing gown watching TV with a cigarette. Wholesome family-friendly cartoon. Now KAI in his white t-shirt vest has climbed out of the red car seat and stands on the carpet
@@ -179,7 +180,7 @@ shots:
 
   - id: w_lad
     scene: waddle
-    faces: {pasty_lad: [0.58, 0.55]}   # where each speaker's face is (0..1)
+    faces: {pasty_lad: [0.57, 0.55]}
     from: alright_kai
     refs: [bg:street, char:pasty_lad]
     prompt: >-
@@ -204,7 +205,7 @@ shots:
   # ── OFF-LICENCE ───────────────────────────────────────────
   - id: o_wide
     scene: offy
-    faces: {tariq: [0.7, 0.5]}   # where each speaker's face is (0..1)
+    faces: {tariq: [0.72, 0.5]}
     from: enter
     refs: [bg:offy, char:tariq, char:kai_vest]
     prompt: >-
@@ -217,7 +218,7 @@ shots:
 
   - id: o_crates
     scene: offy
-    faces: {kai: [0.28, 0.5]}   # where each speaker's face is (0..1)
+    faces: {kai: [0.28, 0.5]}
     from: climb
     refs: [bg:offy, char:tariq, char:kai_vest]
     prompt: >-
@@ -229,7 +230,7 @@ shots:
 
   - id: o_coins
     scene: offy
-    faces: {tariq: [0.82, 0.5]}   # where each speaker's face is (0..1)
+    faces: {tariq: [0.82, 0.51]}
     from: slam
     refs: [bg:offy, char:tariq, char:kai_vest]
     prompt: >-
@@ -250,7 +251,7 @@ shots:
       right behind the counter: TARIQ (beard, navy fleece, glasses on his head), phone lowered,
       looking at Kai flatly. Only one Tariq in the picture. Coins on the counter between them.
       Wholesome family-friendly cartoon.
-    faces: {kai: [0.25, 0.48], tariq: [0.72, 0.48]}   # approximate; refined after drawing
+    faces: {kai: [0.22, 0.46], tariq: [0.68, 0.47]}
     talk:
       kai: "Same picture, change only Kai's mouth: open mid-word. Everything else identical."
       tariq: "Same picture, change only Tariq's mouth: open mid-word. Everything else identical."
@@ -267,7 +268,7 @@ shots:
 
   - id: o_goon
     scene: offy
-    faces: {tariq: [0.68, 0.55]}   # where each speaker's face is (0..1)
+    faces: {tariq: [0.68, 0.51]}
     from: goon
     refs: [bg:offy, char:tariq, char:kai_vest]
     prompt: >-
@@ -279,7 +280,7 @@ shots:
   - id: o_cheers
     scene: offy
     from: cheers
-    faces: {kai: [0.35, 0.5]}
+    faces: {kai: [0.37, 0.52]}
     refs: [shot:o_goon, char:kai_vest]
     prompt: >-
       Same corner shop, same characters as this picture: KAI in his white t-shirt vest stands on his stack
@@ -301,7 +302,7 @@ shots:
   # ── THE LADS ──────────────────────────────────────────────
   - id: l_kai
     scene: lads
-    faces: {kai: [0.47, 0.62]}   # where each speaker's face is (0..1)
+    faces: {kai: [0.47, 0.61]}
     from: step
     refs: [bg:shop_front, char:kai_vest]
     prompt: >-
@@ -314,7 +315,7 @@ shots:
 
   - id: l_girls
     scene: lads
-    faces: {girl: [0.43, 0.55]}   # where each speaker's face is (0..1)
+    faces: {girl: [0.43, 0.53]}
     from: reveal
     refs: [char:girls, bg:shop_front]
     prompt: >-
@@ -322,7 +323,7 @@ shots:
       BUS STOP GIRLS (exactly as in the reference sheet, tracksuits, puffer jacket, slick ponytails,
       gold hoops) all turned to watch something that has just gone past to the right, swooning; the
       middle girl in pink has her hands clasped under her chin with love-struck eyes.
-    talk: {girl: "Same picture, change only the middle girl's mouth: open mid-word, dreamy. Everything else identical."}
+    talk: {girl: "Same picture, change only the face of the girl standing in the middle (black puffer jacket): her mouth open as if talking, dreamy. Everything else identical."}
     move: [[0.5, 0.5, 1.25], [0.5, 0.52, 1.0]]
     rain: true
 
