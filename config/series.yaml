@@ -71,6 +71,15 @@ characters:
     direction: "[thick Bradford Yorkshire accent, flat northern vowels]"
     settings: {stability: 0.5, similarity_boost: 1.0}
     placeholder: {voice: en-gb-x-gbclan+m1, pitch: 20, speed: 140}
+  girl:
+    name: Bus Stop Girl
+    voice_sample: assets/voice_samples/girl_clean.wav   # waiting for the recording
+    voice_from: mam             # used until her own voice is cloned
+    pitch: 3
+    model_id: eleven_v3
+    direction: "[thick Bradford Yorkshire accent, flat northern vowels]"
+    settings: {stability: 0.5, similarity_boost: 1.0}
+    placeholder: {voice: en-gb-x-gbclan+f4, pitch: 60, speed: 150}
 
 # ── Look ─────────────────────────────────────────────────────
 style:

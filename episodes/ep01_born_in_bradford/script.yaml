@@ -85,17 +85,18 @@ scenes:
     background: shop_front
     ambience: [{name: rain, gain: 0.8}]
     beats:
-      - {pause: 0.6, id: step}
-      - {pause: 1.5, id: build, sfx: [bikes_pass]}
-      - {pause: 3.4, id: pass}
-      - {pause: 1.1, id: fade, sfx: [{name: car_alarm_near, at: 0.3}]}
-      - {pause: 1.2, id: turn}
+      - {pause: 0.8, id: step}
       - {speaker: kai, text: "Well.", direction: "sighing, resigned", id: well, gap: 0.6}
-      - {speaker: kai, text: "Better get down t' Job Centre an' get some pennies in.", say: "Better get down t' Job Centre an' get some pennies in.", id: jobcentre}
-      - {pause: 1.8, id: leave}
+      - {speaker: kai, text: "Better get down t' Job Centre an' get some pennies in.", say: "Better get down t' Job Centre an' get some pennies in.", id: jobcentre, gap: 0.3}
+      - {pause: 1.4, id: build, sfx: [bikes_pass]}
+      - {pause: 3.4, id: pass}
+      - {pause: 1.3, id: reveal}
+      - {speaker: girl, text: "I wish he was my babydad.", direction: "dreamy, swooning", id: babydad, gap: 0.4}
+      - {pause: 1.5, id: deadpan, sfx: [{name: car_alarm_near, at: 0.3}]}
+      - {pause: 1.6, id: leave}
 
   - id: end_card
     background: end_card
     ambience: [{name: rain, gain: 0.4}]
     beats:
-      - {pause: 3.5, id: card}
+      - {pause: 3.0, id: card}
