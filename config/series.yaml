@@ -30,9 +30,8 @@ characters:
   kai:
     name: Kai
     voice_sample: assets/voice_samples/kai_clean.wav
-    pitch_start: 5.0
-    pitch_step: -0.5
-    formant: shifted          # "shifted" = squeakier/babyish, "preserved" = more grown-up
+    pitch: 0                  # no squeak (set e.g. 5 for a babyish pitch-up)
+    formant: preserved
     settings: {stability: 0.4, similarity_boost: 0.8, style: 0.6, use_speaker_boost: true}
     placeholder: {voice: en-gb-x-gbclan, pitch: 35, speed: 150}
   mam:
