@@ -31,7 +31,7 @@ scenes:
       - {pause: 0.7, id: groan2, sfx: [mam_groan_big]}
       - {pause: 1.1, id: pop, sfx: [pop, {name: slide, at: 0.15}]}
       - {pause: 0.7, id: sit}
-      - {pause: 2.6, id: look}
+      - {pause: 2.3, id: look}
       - {pause: 1.0, id: hold}
       - {speaker: kai, text: "...Fuck's sake.", say: "...Fuck's sake.", direction: "squeaky, utterly defeated", id: fs, gap: 0.6}
       - {speaker: kai, text: "I'm in Bradford.", say: "I'm in Bradford.", id: bradford, gap: 0.4}
@@ -92,10 +92,10 @@ scenes:
       - {pause: 1.2, id: turn}
       - {speaker: kai, text: "Well.", direction: "sighing, resigned", id: well, gap: 0.6}
       - {speaker: kai, text: "Better get down t' Job Centre an' get some pennies in.", say: "Better get down t' Job Centre an' get some pennies in.", id: jobcentre}
-      - {pause: 2.2, id: leave}
+      - {pause: 1.8, id: leave}
 
   - id: end_card
     background: end_card
     ambience: [{name: rain, gain: 0.4}]
     beats:
-      - {pause: 4.0, id: card}
+      - {pause: 3.5, id: card}

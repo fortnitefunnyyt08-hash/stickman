@@ -66,9 +66,10 @@ def synthesize(cfg: dict, episode: int, speaker: str, text: str, say: str | None
     CACHE.mkdir(parents=True, exist_ok=True)
 
     if use_eleven:
-        tts = cfg["tts"]
-        raw_key = _hash(["el", voice_id, say, tts["model_id"], ch.get("settings")])
-        raw_audio, alignment = _eleven_raw(cfg, voice_id, say, ch.get("settings") or {}, raw_key)
+        model = ch.get("model_id") or cfg["tts"]["model_id"]
+        text_in = f"{ch['direction']} {say}" if ch.get("direction") else say
+        raw_key = _hash(["el", voice_id, text_in, model, ch.get("settings")])
+        raw_audio, alignment = _eleven_raw(cfg, voice_id, text_in, model, ch.get("settings") or {}, raw_key)
         backend = "elevenlabs"
     else:
         ph = ch.get("placeholder", {})
@@ -89,6 +90,9 @@ def synthesize(cfg: dict, episode: int, speaker: str, text: str, say: str | None
         tmp.unlink()
         lead, tail = audio_io.trim_silence_bounds(data)
         lead = max(0.0, lead - 0.03)
+        spoken = _text_start(alignment)
+        if spoken is not None:  # cut anything said before the real words (e.g. a spoken [tag])
+            lead = max(lead, spoken - 0.06)
         tail = min(len(data) / audio_io.SR, tail + 0.12)
         data = data[int(lead * audio_io.SR): int(tail * audio_io.SR)]
         peak = np.abs(data).max() or 1
@@ -103,7 +107,7 @@ def synthesize(cfg: dict, episode: int, speaker: str, text: str, say: str | None
 
 # ── ElevenLabs ───────────────────────────────────────────────
 
-def _eleven_raw(cfg, voice_id, say, settings, key) -> tuple[Path, dict | None]:
+def _eleven_raw(cfg, voice_id, say, model, settings, key) -> tuple[Path, dict | None]:
     mp3 = CACHE / f"{key}.mp3"
     js = CACHE / f"{key}.align.json"
     if mp3.exists() and js.exists():
@@ -112,7 +116,7 @@ def _eleven_raw(cfg, voice_id, say, settings, key) -> tuple[Path, dict | None]:
 
     tts = cfg["tts"]
     url = f"{tts['api_base']}/v1/text-to-speech/{voice_id}/with-timestamps"
-    body = {"text": say, "model_id": tts["model_id"], "voice_settings": settings}
+    body = {"text": say, "model_id": model, "voice_settings": settings}
     r = requests.post(url, params={"output_format": tts["output_format"]},
                       headers={"xi-api-key": api_key(), "Content-Type": "application/json"},
                       json=body, timeout=120)
@@ -140,6 +144,24 @@ def _espeak_raw(say: str, ph: dict, key: str) -> Path:
     return out
 
 
+def _text_start(alignment) -> float | None:
+    """Start time of the first spoken character after any leading [audio tag]."""
+    if not alignment or not alignment.get("characters"):
+        return None
+    chars = alignment["characters"]
+    if not chars or chars[0] != "[":
+        return None
+    depth = 0
+    for c, s in zip(chars, alignment["character_start_times_seconds"]):
+        if c == "[":
+            depth += 1
+        elif c == "]":
+            depth -= 1
+        elif depth == 0 and not c.isspace() and c not in ".":
+            return s
+    return None
+
+
 # ── caption word timings ─────────────────────────────────────
 
 def _caption_words(text, say, alignment, lead, duration, wav) -> list[tuple[str, float, float]]:
@@ -150,7 +172,16 @@ def _caption_words(text, say, alignment, lead, duration, wav) -> list[tuple[str,
         st = alignment["character_start_times_seconds"]
         en = alignment["character_end_times_seconds"]
         cur, cs, ce = "", None, None
+        depth = 0
         for c, s, e in zip(chars, st, en):
+            if c == "[":
+                depth += 1
+                continue
+            if c == "]":
+                depth = max(0, depth - 1)
+                continue
+            if depth:
+                continue
             if c.isspace():
                 if cur:
                     timed.append((cur, cs, ce))
