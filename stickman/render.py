@@ -114,7 +114,9 @@ class Captions:
     def __init__(self, cfg: dict, W: int, H: int):
         cc = cfg["captions"]
         self.cfg = cc
-        self.font = skia.Font(skia.Typeface.MakeFromFile(cc["font"]), cc["size"])
+        from .config import ROOT
+        fp = cc["font"] if Path(cc["font"]).is_absolute() else str(ROOT / cc["font"])
+        self.font = skia.Font(skia.Typeface.MakeFromFile(fp), cc["size"])
         self.W, self.H = W, H
         self.censor = [w.lower() for w in cc.get("censor", [])]
 
@@ -169,7 +171,9 @@ class Captions:
 
 def draw_title(c, cfg, W, H, text, style, k_in, k_out, t):
     """style: stamp (top, typewriter) | card (full-screen black card) | endcard."""
-    font = skia.Font(skia.Typeface.MakeFromFile(cfg["titles"]["font"]), cfg["titles"]["size"])
+    from .config import ROOT
+    fp = cfg["titles"]["font"] if Path(cfg["titles"]["font"]).is_absolute() else str(ROOT / cfg["titles"]["font"])
+    font = skia.Font(skia.Typeface.MakeFromFile(fp), cfg["titles"]["size"])
     if style == "card":
         a = min(k_in * 4, 1) * (1 - k_out)
         c.drawRect(skia.Rect.MakeWH(W, H), fill(hexc("#0d0e10"), a))
@@ -219,12 +223,16 @@ def render(cfg: dict, tl: Timeline, animations: dict, out: Path, audio: Path, pr
     frame = 0
     try:
         for sc in scenes:
-            if sc.background not in bg_cache:
-                bg_cache.clear()
-                bg_cache[sc.background] = backgrounds.render(sc.background, 1.0 if preview else 2.0)
-            bg_img, info, (bw, bh) = bg_cache[sc.background]
-            bscale = bw / bg_img.width()
             anim = animations.get(sc.id)
+            full = getattr(anim, "full_frame", False)
+            if full:
+                bg_img, info, (bw, bh), bscale = None, {}, (W, H), 1.0
+            else:
+                if sc.background not in bg_cache:
+                    bg_cache.clear()
+                    bg_cache[sc.background] = backgrounds.render(sc.background, 1.0 if preview else 2.0)
+                bg_img, info, (bw, bh) = bg_cache[sc.background]
+                bscale = bw / bg_img.width()
             nframes = int(round(sc.duration * fps))
             log(f"  rendering {sc.id:>10}: {nframes} frames")
             for f in range(nframes):
@@ -233,6 +241,8 @@ def render(cfg: dict, tl: Timeline, animations: dict, out: Path, audio: Path, pr
                 c.scale(scale_out, scale_out)
                 c.clear(skia.ColorBLACK)
                 ctx = Ctx(c, sc, t, fps, info, frame)
+                if full:
+                    anim.draw(ctx)
                 if anim and hasattr(anim, "camera"):
                     anim.camera(ctx)
                 cam = ctx.cam
@@ -248,12 +258,13 @@ def render(cfg: dict, tl: Timeline, animations: dict, out: Path, audio: Path, pr
                 c.rotate(cam.rot)
                 c.scale(cam.zoom, cam.zoom)
                 c.translate(-cam.cx, -cam.cy)
-                c.save()
-                c.scale(bscale, bscale)
-                c.drawImage(bg_img, 0, 0, skia.SamplingOptions(skia.FilterMode.kLinear))
-                c.restore()
-                if anim:
-                    anim.draw(ctx)
+                if not full:
+                    c.save()
+                    c.scale(bscale, bscale)
+                    c.drawImage(bg_img, 0, 0, skia.SamplingOptions(skia.FilterMode.kLinear))
+                    c.restore()
+                    if anim:
+                        anim.draw(ctx)
                 c.restore()
                 # screen-space weather + grade
                 rain.draw(c, sc.start + t, ctx.rain, ctx.rain_speed)

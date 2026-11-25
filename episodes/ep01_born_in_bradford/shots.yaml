@@ -1,0 +1,359 @@
+# AI shot list for Episode 1. Each shot is one illustration that starts at beat
+# `from` and runs until the next shot in the same scene. Pictures are generated
+# by `python -m stickman.shots episodes/ep01_born_in_bradford` and cached.
+#
+# refs: bg:<name> = build/ai/backgrounds/<name>.png, char:<name> = character sheet
+# talk: speaker -> mouth-open variant used for lip flaps
+# move: Ken Burns camera [cx, cy, zoom] at shot start -> end (cx/cy as 0..1 of the picture)
+# sprites (separate list) are cut-outs on green screen, animated in animation_ai.py
+
+style: >-
+  Hand-drawn 2D cartoon illustration, polished and detailed like a high-end animated TikTok
+  stickman explainer: clean bold black ink outlines with a slightly sketchy hand-drawn line,
+  soft painterly colour, gentle shading and depth. Characters are white stickman figures with
+  large round white heads and big expressive cartoon eyes, exactly matching the character
+  reference sheets provided. Full-bleed vertical 9:16 frame, artwork to all four edges, no
+  borders, no text, no captions, no watermark.
+
+shots:
+  # ── COLD OPEN ──────────────────────────────────────────────
+  - id: c_estate
+    scene: cold_open
+    from: open
+    image: {use: bg:estate_v3}
+    move: [[0.5, 0.5, 1.0], [0.62, 0.42, 1.6]]
+    rain: true
+
+  # ── BIRTH ─────────────────────────────────────────────────
+  - id: b_wide
+    scene: birth
+    from: groan1
+    refs: [bg:bedroom_v2, char:mam, char:midwife]
+    prompt: >-
+      This bedroom. MAM (pink dressing gown, hair in a bun) lies propped up against the wall on the
+      bare mattress on the floor, knees up under a pale blue sheet that covers her from the waist
+      down, face screwed up straining. The MIDWIFE in blue NHS scrubs and blue gloves kneels on the
+      carpet in front of the sheet, facing Mam, cheerfully encouraging with one fist pumped.
+      Wide shot showing the whole scene, characters in the lower half.
+    talk: {midwife: "Same picture, change only the midwife's face: her mouth wide open mid-shout, encouraging. Everything else identical."}
+    move: [[0.5, 0.6, 1.05], [0.5, 0.62, 1.15]]
+
+  - id: b_sit
+    scene: birth
+    from: sit
+    refs: [bg:bedroom_v2, char:kai_vest]
+    prompt: >-
+      This bedroom. The cartoon stickman character KAI from the reference sheet (round white head,
+      curly tuft, white t-shirt vest over his nappy) sits on the carpet in the foreground, eyes wide and confused, looking
+      around the grim room. The mattress, mould and rainy window are behind him. Wholesome
+      family-friendly cartoon.
+    variants:
+      up: "Same picture, change only Kai's eyes: he is looking up at the mould on the ceiling, unimpressed. Everything else identical."
+      window: "Same picture, change only Kai's head and eyes: he is looking sideways at the rainy window, unimpressed. Everything else identical."
+    move: [[0.5, 0.6, 1.0], [0.5, 0.55, 1.12]]
+
+  - id: b_face
+    scene: birth
+    from: hold
+    refs: [char:kai_vest, bg:bedroom_v2]
+    prompt: >-
+      Close-up of KAI's face and shoulders in his white t-shirt vest, sitting on the carpet in the grim bedroom
+      (blurred background). Utterly defeated, dead-eyed, heavy half-closed eyelids, mouth closed in
+      a flat line, like a tired 40-year-old man realising where he is.
+    talk: {kai: "Same cartoon picture, change only the character's mouth so it is open as if talking. Everything else identical."}
+    move: [[0.5, 0.45, 1.0], [0.5, 0.42, 1.12]]
+
+  - id: b_scrabble
+    scene: birth
+    from: turn
+    refs: [bg:bedroom_v2, char:kai_vest, char:mam]
+    prompt: >-
+      This bedroom. KAI in his white t-shirt vest stands on the carpet beside the mattress, one hand
+      on his hip, the other pointing back at the mattress, looking at the camera like an angry
+      customer demanding a refund at a returns desk. MAM, propped against the wall on the mattress
+      in her pink dressing gown under a pale blue blanket, ignores him and watches the TV.
+      Wholesome family-friendly cartoon.
+    talk: {kai: "Same cartoon picture, change only the small character's mouth so it is open as if talking. Everything else identical."}
+    move: [[0.5, 0.6, 1.1], [0.48, 0.62, 1.22]]
+
+  - id: b_mam
+    scene: birth
+    from: norefunds
+    refs: [bg:bedroom_v2, char:mam]
+    prompt: >-
+      Medium shot of MAM propped against the bedroom wall on the mattress in her pink dressing gown,
+      hair in a bun, lighting a cigarette with a plastic lighter, not even looking, eyes fixed on the
+      glowing TV, completely unbothered.
+    talk: {mam: "Same picture, change only Mam's mouth: open mid-word, cigarette still in hand. Everything else identical."}
+    move: [[0.5, 0.45, 1.05], [0.5, 0.45, 1.15]]
+
+  - id: b_dangle
+    scene: birth
+    from: lift
+    refs: [bg:bedroom_v2, char:midwife, char:kai_vest]
+    prompt: >-
+      This bedroom. Two separate characters: the MIDWIFE in blue scrubs stands on the left with one
+      arm stretched out to the right, and her hand pinches the top of KAI's nappy, lifting him up
+      off the floor. KAI is a separate small character hanging in the air from her hand on the
+      right, legs dangling, arms folded, glaring at the camera. Kai wears his own white t-shirt
+      vest, he does not wear scrubs. Wholesome family-friendly cartoon.
+    talk: {kai: "Same picture, change only Kai's mouth: open mid-word, muttering grumpily. Everything else identical."}
+    move: [[0.5, 0.45, 1.05], [0.5, 0.42, 1.2]]
+
+  # ── ERRAND ────────────────────────────────────────────────
+  - id: e_wide
+    scene: errand
+    from: card
+    refs: [bg:living_room_v3, char:mam, char:kai_vest]
+    prompt: >-
+      This living room. MAM slouches on the saggy sofa in her pink dressing gown with a cigarette,
+      eyes on the TV, holding out a fistful of coins towards KAI without looking. KAI, now in his
+      white t-shirt vest, sits in the red baby car seat on the carpet, staring at her flatly.
+    talk: {mam: "Same picture, change only Mam's mouth: open mid-word. Everything else identical."}
+    move: [[0.5, 0.55, 1.0], [0.5, 0.58, 1.1]]
+
+  - id: e_kai
+    scene: errand
+    from: onehour
+    refs: [bg:living_room_v3, char:kai_vest]
+    prompt: >-
+      Medium shot of the cartoon stickman character KAI from the reference sheet, wearing a white vest,
+      sitting in the red car seat on the living room carpet, looking up to the left with tired
+      disbelief. Wholesome family-friendly cartoon.
+    talk: {kai: "Same picture, change only Kai's mouth: open mid-word. Everything else identical."}
+    move: [[0.5, 0.5, 1.05], [0.5, 0.48, 1.15]]
+
+  - id: e_mam
+    scene: errand
+    from: brother
+    refs: [bg:living_room_v3, char:mam]
+    prompt: >-
+      Medium shot of MAM slouched on the sofa in her pink dressing gown, cigarette in one hand,
+      holding out coins with the other, shrugging, eyes still on the TV, totally unbothered.
+    talk: {mam: "Same picture, change only Mam's mouth: open mid-word. Everything else identical."}
+    move: [[0.5, 0.5, 1.05], [0.5, 0.5, 1.15]]
+
+  - id: e_stare
+    scene: errand
+    from: stare
+    refs: [char:kai_vest, bg:living_room_v3]
+    prompt: >-
+      Extreme close-up of KAI in his car seat staring directly into the camera, deadpan,
+      eyebrows slightly raised, like Jim from The Office looking at the camera. Background softly
+      blurred living room.
+    move: [[0.5, 0.45, 1.0], [0.5, 0.45, 1.08]]
+
+  - id: e_go
+    scene: errand
+    from: climb
+    refs: [bg:living_room_v3, char:kai_vest, char:mam]
+    prompt: >-
+      This living room. KAI in his white t-shirt vest stands on the patterned carpet in the
+      foreground next to the empty red car seat, holding a few coins in one hand, sighing with an
+      exasperated deadpan look, about to set off on an errand. Wholesome family-friendly cartoon.
+    talk: {kai: "Same picture, change only Kai's mouth: open mid-word, grumbling. Everything else identical."}
+    move: [[0.5, 0.6, 1.1], [0.5, 0.6, 1.0]]
+
+  # ── WADDLE ────────────────────────────────────────────────
+  - id: w_trolley
+    scene: waddle
+    from: walk1
+    refs: [bg:street]
+    prompt: >-
+      Vertical crop of this street: the wet pavement with the privet hedge and the abandoned
+      shopping trolley rammed into it, council houses behind, drizzle. Empty pavement, no people.
+    move: [[0.4, 0.55, 1.05], [0.6, 0.55, 1.05]]
+    rain: true
+
+  - id: w_lad
+    scene: waddle
+    from: alright_kai
+    refs: [bg:street, char:pasty_lad]
+    prompt: >-
+      Vertical crop of this street at the low red-brick garden wall. PASTY LAD in a grey tracksuit
+      sits on the wall eating a sausage roll, looking down at the pavement to the left with a small
+      deadpan nod. Wet pavement in the foreground, drizzle.
+    talk: {pasty_lad: "Same picture, change only the lad's mouth: open saying 'alright'. Everything else identical."}
+    move: [[0.45, 0.55, 1.05], [0.55, 0.55, 1.05]]
+    rain: true
+
+  - id: w_pigeon
+    scene: waddle
+    from: walk2
+    refs: [bg:street]
+    prompt: >-
+      Vertical crop of this street by the wheelie bins and the old mattress. On the wet pavement stands
+      an enormous scruffy grey city pigeon, as tall as a small child, iridescent neck, staring
+      menacingly to the left. Drizzle.
+    move: [[0.4, 0.55, 1.05], [0.6, 0.55, 1.05]]
+    rain: true
+
+  # ── OFF-LICENCE ───────────────────────────────────────────
+  - id: o_wide
+    scene: offy
+    from: enter
+    refs: [bg:offy, char:tariq, char:kai_vest]
+    prompt: >-
+      This corner shop. TARIQ stands behind the counter scrolling his phone, reading glasses on his
+      head, not looking up. Tiny KAI in a white vest and nappy has just come in through the door
+      at the left, clutching coins, looking up at the counter which is far taller than him.
+      Wide shot.
+    talk: {tariq: "Same picture, change only Tariq's mouth: open mid-word, still looking at his phone. Everything else identical."}
+    move: [[0.5, 0.55, 1.0], [0.5, 0.55, 1.08]]
+
+  - id: o_crates
+    scene: offy
+    from: climb
+    refs: [bg:offy, char:tariq, char:kai_vest]
+    prompt: >-
+      This corner shop, closer. KAI stands on top of a wobbly stack of three plastic pop crates
+      in front of the counter so his head is just above it, holding out his coins. TARIQ behind the
+      counter still scrolling his phone.
+    talk: {kai: "Same picture, change only Kai's mouth: open mid-word. Everything else identical."}
+    move: [[0.45, 0.5, 1.05], [0.48, 0.48, 1.12]]
+
+  - id: o_coins
+    scene: offy
+    from: slam
+    refs: [bg:offy, char:tariq, char:kai_vest]
+    prompt: >-
+      Same corner shop, same framing as Kai on the crates at the counter: KAI has just slammed his
+      coins down, coins scattered and bouncing all over the counter and falling to the floor. TARIQ
+      looks down at the mess over his phone, deadpan.
+    talk: {tariq: "Same picture, change only Tariq's mouth: open mid-word. Everything else identical."}
+    move: [[0.48, 0.5, 1.15], [0.5, 0.5, 1.05]]
+
+  - id: o_two
+    scene: offy
+    from: tab
+    refs: [bg:offy, char:tariq, char:kai_vest]
+    prompt: >-
+      Over-the-counter two-shot: KAI on his crates on the left, arms folded, negotiating;
+      TARIQ behind the counter on the right, phone lowered, looking at him flatly. Coins on the
+      counter between them.
+    talk:
+      kai: "Same picture, change only Kai's mouth: open mid-word. Everything else identical."
+      tariq: "Same picture, change only Tariq's mouth: open mid-word. Everything else identical."
+    move: [[0.5, 0.48, 1.08], [0.5, 0.48, 1.16]]
+
+  - id: o_stare
+    scene: offy
+    from: stare
+    refs: [bg:offy, char:tariq]
+    prompt: >-
+      Close-up of TARIQ behind the counter, reading glasses on his head, giving a long, flat,
+      unimpressed stare straight ahead, phone lowered. Tobacco gantry behind him.
+    move: [[0.5, 0.45, 1.0], [0.5, 0.42, 1.2]]
+
+  - id: o_goon
+    scene: offy
+    from: goon
+    refs: [bg:offy, char:tariq, char:kai_vest]
+    prompt: >-
+      TARIQ, back to scrolling his phone, slides a small blue plastic carrier bag across the counter to
+      KAI standing on his crates, without looking up. Over-the-counter shot.
+    talk: {tariq: "Same picture, change only Tariq's mouth: open mid-word. Everything else identical."}
+    move: [[0.5, 0.48, 1.08], [0.5, 0.48, 1.14]]
+
+  - id: o_cheers
+    scene: offy
+    from: cheers
+    refs: [bg:offy, char:kai_vest]
+    prompt: >-
+      Medium shot of KAI standing on his crates at the counter holding a small blue plastic carrier
+      bag, giving a satisfied little nod.
+    talk: {kai: "Same picture, change only Kai's mouth: open mid-word. Everything else identical."}
+    move: [[0.5, 0.48, 1.05], [0.5, 0.48, 1.12]]
+
+  - id: o_exit
+    scene: offy
+    from: exit
+    refs: [bg:offy, char:tariq, char:kai_vest]
+    prompt: >-
+      This corner shop, wide shot. KAI waddles out of the door at the left carrying a small blue
+      plastic carrier bag, seen from behind. TARIQ behind the counter has gone back to his phone.
+    move: [[0.5, 0.55, 1.08], [0.45, 0.55, 1.0]]
+
+  # ── THE LADS ──────────────────────────────────────────────
+  - id: l_kai
+    scene: lads
+    from: step
+    refs: [bg:shop_front, char:kai_vest]
+    prompt: >-
+      Outside this shop in the drizzle. KAI in his white vest stands on the wet pavement in front of
+      the shop door holding a small blue plastic carrier bag, looking at the camera, resigned.
+      Medium shot, Kai in the lower centre.
+    talk: {kai: "Same picture, change only Kai's mouth: open mid-word, sighing. Everything else identical."}
+    move: [[0.5, 0.6, 1.1], [0.5, 0.62, 1.22]]
+    rain: true
+
+  - id: l_road
+    scene: lads
+    from: build
+    refs: [bg:shop_front, char:kai_vest]
+    prompt: >-
+      Outside this shop, wide shot showing the road across the bottom of the frame. KAI stands
+      small on the pavement by the shop door, eyes wide, startled, looking left down the road.
+      The road in front of him is empty.
+    move: [[0.5, 0.62, 1.0], [0.5, 0.62, 1.04]]
+    rain: true
+
+  - id: l_girls
+    scene: lads
+    from: reveal
+    refs: [char:girls, bg:shop_front]
+    prompt: >-
+      Across the road from the shop: a grimy bus shelter on a wet pavement in the drizzle, three
+      BUS STOP GIRLS (exactly as in the reference sheet, tracksuits, puffer jacket, slick ponytails,
+      gold hoops) all turned to watch something that has just gone past to the right, swooning; the
+      middle girl in pink has her hands clasped under her chin with love-struck eyes.
+    talk: {girl: "Same picture, change only the middle girl's mouth: open mid-word, dreamy. Everything else identical."}
+    move: [[0.5, 0.5, 1.25], [0.5, 0.52, 1.0]]
+    rain: true
+
+  - id: l_deadpan
+    scene: lads
+    from: deadpan
+    refs: [char:kai_vest, bg:shop_front]
+    prompt: >-
+      Close-up of KAI outside the shop in the rain holding a small blue plastic carrier bag, staring
+      dead into the camera, completely deadpan, one eyebrow slightly raised. Blurred shop front
+      behind.
+    move: [[0.5, 0.45, 1.0], [0.5, 0.43, 1.12]]
+    rain: true
+
+  - id: l_leave
+    scene: lads
+    from: leave
+    refs: [bg:street, char:kai_vest]
+    prompt: >-
+      KAI seen from behind waddling away along the long wet pavement into the grey drizzle, carrying
+      a small blue plastic carrier bag, small in the frame, council houses and lamp posts stretching away.
+    move: [[0.5, 0.6, 1.0], [0.5, 0.58, 1.12]]
+    rain: true
+
+  # ── END CARD ──────────────────────────────────────────────
+  - id: x_end
+    scene: end_card
+    from: card
+    refs: [char:kai]
+    prompt: >-
+      KAI, now wearing a tiny grey tracksuit with socks pulled over the bottoms, standing
+      outside a grim UK Job Centre building in the rain, holding a brown benefits letter, deadpan.
+      Character in the lower half, space at the top.
+    move: [[0.5, 0.5, 1.0], [0.5, 0.5, 1.08]]
+    rain: true
+
+sprites:
+  - id: kai_slide
+    refs: [char:kai_vest]
+    prompt: "KAI in his white t-shirt vest tumbling through the air head-first with arms and legs flailing, startled wide eyes. Wholesome family-friendly cartoon."
+  - id: kai_walk
+    refs: [char:kai_vest]
+    prompt: "Side view of KAI in his white t-shirt vest waddling to the right, clutching a handful of coins to his chest, deadpan face. Wholesome family-friendly cartoon."
+  - id: lads_bikes
+    refs: [char:lads]
+    prompt: "Three LADS in tracksuits, socks over trackies and bucket hats each riding a dirt bike to the right in a line, all pulling big wheelies with the front wheels high in the air, one standing on the pegs, one waving, side view."
+  - id: crisp_packet
+    refs: []
+    prompt: "A crumpled empty red packet of crisps, cartoon style."

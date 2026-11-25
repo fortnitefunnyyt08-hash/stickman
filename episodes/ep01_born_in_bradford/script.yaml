@@ -26,12 +26,12 @@ scenes:
     background: bedroom
     ambience: [{name: rain_inside, gain: 0.7}, {name: telly_jeremy, gain: 0.55}]
     beats:
-      - {pause: 0.9, id: groan1, sfx: [mam_groan]}
+      - {pause: 0.7, id: groan1, sfx: [mam_groan]}
       - {speaker: midwife, text: "One more push, love!", id: push_line}
       - {pause: 0.7, id: groan2, sfx: [mam_groan_big]}
       - {pause: 1.1, id: pop, sfx: [pop, {name: slide, at: 0.15}]}
       - {pause: 0.7, id: sit}
-      - {pause: 2.3, id: look}
+      - {pause: 1.9, id: look}
       - {pause: 1.0, id: hold}
       - {speaker: kai, text: "...Fuck's sake.", say: "...Fuck's sake.", direction: "squeaky, utterly defeated", id: fs, gap: 0.6}
       - {speaker: kai, text: "I'm in Bradford.", say: "I'm in Bradford.", id: bradford, gap: 0.4}
@@ -46,7 +46,7 @@ scenes:
     ambience: [{name: telly_jeremy, gain: 0.45}, {name: rain_inside, gain: 0.35}]
     titles: [{text: "ONE HOUR LATER", at: 0.0, until: 1.3, style: card}]
     beats:
-      - {pause: 1.8, id: card, sfx: [{name: crisp_rustle, at: 1.8}]}
+      - {pause: 1.5, id: card, sfx: [{name: crisp_rustle, at: 1.8}]}
       - {speaker: mam, text: "Go t' shop for us, love. Twenty Lambert an' Butler.", say: "Go t' shop for uz, love. Twenty Lambert an' Butler.", id: goshop, sfx: [{name: coins_jingle, at: 0.2}]}
       - {speaker: kai, text: "Our mam. I'm one hour old.", say: "Ah mam. I'm one hour old.", id: onehour}
       - {speaker: mam, text: "An'? Your brother were goin' at two days.", say: "An'? Yer brother were goin' at two days.", id: brother}
@@ -69,14 +69,14 @@ scenes:
     beats:
       - {pause: 0.6, id: enter, sfx: [door_ding]}
       - {speaker: tariq, text: "Twenty Lambert an' Butler, is it?", direction: "still scrolling, totally flat", id: twenty}
-      - {pause: 1.9, id: climb}
+      - {pause: 1.5, id: climb}
       - {speaker: kai, text: "Yeah, mush.", say: "Yeah, mush.", id: yeahmush}
       - {pause: 2.2, id: slam, sfx: [coin_slam]}
       - {speaker: tariq, text: "You're thirty pence short, mate.", id: short}
       - {speaker: kai, text: "Put it on t' tab.", id: tab}
       - {speaker: tariq, text: "You were born this mornin'. You haven't got a tab.", id: born}
       - {speaker: kai, text: "Start one, then.", id: startone}
-      - {pause: 1.9, id: stare, sfx: [{name: sigh_tariq, at: 1.2}, {name: slide_pack, at: 1.6}]}
+      - {pause: 1.6, id: stare, sfx: [{name: sigh_tariq, at: 1.0}, {name: slide_pack, at: 1.3}]}
       - {speaker: tariq, text: "...Go on. Tell your mam she owes me.", say: "...Go on. Tell yer mam she owes me.", id: goon}
       - {speaker: kai, text: "Cheers, mush. Sound.", id: cheers}
       - {pause: 1.6, id: exit, sfx: [{name: door_ding, at: 1.3}]}
@@ -88,12 +88,12 @@ scenes:
       - {pause: 0.8, id: step}
       - {speaker: kai, text: "Well.", direction: "sighing, resigned", id: well, gap: 0.6}
       - {speaker: kai, text: "Better get down t' Job Centre an' get some pennies in.", say: "Better get down t' Job Centre an' get some pennies in.", id: jobcentre, gap: 0.3}
-      - {pause: 1.4, id: build, sfx: [bikes_pass]}
+      - {pause: 1.0, id: build, sfx: [bikes_pass]}
       - {pause: 3.4, id: pass}
-      - {pause: 1.3, id: reveal}
+      - {pause: 1.0, id: reveal}
       - {speaker: girl, text: "I wish he was my babydad.", direction: "dreamy, swooning", id: babydad, gap: 0.4}
-      - {pause: 1.5, id: deadpan, sfx: [{name: car_alarm_near, at: 0.3}]}
-      - {pause: 1.6, id: leave}
+      - {pause: 1.2, id: deadpan, sfx: [{name: car_alarm_near, at: 0.3}]}
+      - {pause: 1.2, id: leave}
 
   - id: end_card
     background: end_card

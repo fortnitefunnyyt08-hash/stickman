@@ -18,8 +18,8 @@ from . import mix, render, timeline
 from .config import BUILD, load_episode, load_series
 
 
-def load_animation(ep_dir):
-    spec = importlib.util.spec_from_file_location(f"anim_{ep_dir.name}", ep_dir / "animation.py")
+def load_animation(ep_dir, name="animation.py"):
+    spec = importlib.util.spec_from_file_location(f"anim_{ep_dir.name}_{name[:-3]}", ep_dir / name)
     mod = importlib.util.module_from_spec(spec)
     sys.path.insert(0, str(ep_dir.parent.parent))
     spec.loader.exec_module(mod)
@@ -32,6 +32,8 @@ def main(argv=None) -> None:
     ap.add_argument("--preview", action="store_true", help="half resolution, fast encode")
     ap.add_argument("--scene", help="render only this scene id")
     ap.add_argument("--voices", default="auto", choices=["auto", "elevenlabs", "placeholder"])
+    ap.add_argument("--look", default="ai", choices=["ai", "drawn"],
+                    help="ai = AI illustrated shots (animation_ai.py), drawn = code-drawn stickmen (animation.py)")
     a = ap.parse_args(argv)
 
     t0 = time.time()
@@ -50,7 +52,10 @@ def main(argv=None) -> None:
                 f.write(f"         {sc.start + b.start:7.2f}  {b.id:<14} {b.speaker or '':<10} {b.text}\n")
     print(f"      runtime {tl.duration:.1f}s" + ("" if 80 <= tl.duration <= 90 else "  (target is 80-90s)"))
 
-    anim = load_animation(ep_dir)
+    use_ai = a.look == "ai" and (ep_dir / "animation_ai.py").exists()
+    anim = load_animation(ep_dir, "animation_ai.py" if use_ai else "animation.py")
+    if use_ai and hasattr(anim, "setup"):
+        anim.setup(ep_dir, tl, preview=a.preview)
     print("[2/4] audio mix")
     wav = out_dir / "mix.wav"
     mix.mix(cfg, tl, wav, anim.audio_events(tl) if hasattr(anim, "audio_events") else [])

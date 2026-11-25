@@ -32,7 +32,7 @@ tts:
 characters:
   kai:
     name: Kai
-    voice_sample: assets/voice_samples/kai_clean.wav
+    voice_sample: assets/voice_samples/kai2_clean.wav   # second friend, consented
     pitch: 0                  # no squeak (set e.g. 5 for a babyish pitch-up)
     formant: preserved
     model_id: eleven_v4
@@ -73,9 +73,8 @@ characters:
     placeholder: {voice: en-gb-x-gbclan+m1, pitch: 20, speed: 140}
   girl:
     name: Bus Stop Girl
-    voice_sample: assets/voice_samples/girl_clean.wav   # waiting for the recording
-    voice_from: mam             # used until her own voice is cloned
-    pitch: 3
+    voice_sample: assets/voice_samples/girl_clean.wav
+    pitch: 0
     model_id: eleven_v3
     direction: "[thick Bradford Yorkshire accent, flat northern vowels]"
     settings: {stability: 0.5, similarity_boost: 1.0}
@@ -92,10 +91,10 @@ style:
 
 # ── Captions (TikTok style, word by word) ────────────────────
 captions:
-  font: /usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf
-  size: 92
-  y: 0.35                 # fraction of screen height (middle third)
-  max_words: 3            # words on screen at once
+  font: assets/fonts/Bangers-Regular.ttf   # comic font (SIL Open Font License)
+  size: 118
+  y: 0.36                 # fraction of screen height (middle third)
+  max_words: 2            # words on screen at once
   color: "#ffffff"
   highlight: "#ffd83d"
   outline: "#000000"
@@ -104,8 +103,8 @@ captions:
   censor: []              # e.g. ["fuck"] -> "F**K" for platforms that mute swearing
 
 titles:
-  font: /usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf
-  size: 64
+  font: assets/fonts/Bangers-Regular.ttf
+  size: 84
 
 # ── Audio mix ────────────────────────────────────────────────
 audio:
