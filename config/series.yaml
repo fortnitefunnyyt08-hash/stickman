@@ -114,4 +114,4 @@ audio:
   ambience_gain: 0.45
   music_gain: 0.16
   duck: 0.45              # music/ambience level while someone is talking
-  line_gap: 0.15          # default seconds of silence after each line
+  line_gap: 0.45          # default seconds of silence after each line

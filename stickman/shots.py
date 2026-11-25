@@ -62,7 +62,10 @@ class ShotSet:
         for sh in self.spec["shots"]:
             sid = sh["id"]
             img = sh.get("image", {})
-            if img.get("use"):
+            if img.get("use", "").startswith("shot:"):   # reuse another shot's picture
+                src = self.base(img["use"].split(":", 1)[1])
+                yield 1, sid, (lambda src=src, sid=sid: self._copy(src, self.base(sid)))
+            elif img.get("use"):
                 src = ref_path(img["use"])
                 yield 0, sid, (lambda src=src, sid=sid: self._copy(src, self.base(sid)))
             else:
@@ -72,8 +75,10 @@ class ShotSet:
             vars_ = dict(sh.get("variants", {}))
             for spk, p in (sh.get("talk") or {}).items():
                 vars_[f"talk_{spk}"] = p
+            faces = sh.get("faces") or {}
             for name, p in vars_.items():
-                yield 1, f"{sid}__{name}", (lambda p=p, sid=sid, name=name: self._variant(sid, name, p, sid in redo))
+                face = faces.get(name[5:]) if name.startswith("talk_") else (list(faces.values()) or [None])[0]
+                yield 1, f"{sid}__{name}", (lambda p=p, sid=sid, name=name, face=face: self._variant(sid, name, p, sid in redo, face))
         for sp in self.spec.get("sprites", []):
             refs = [ref_path(r) for r in sp.get("refs", [])]
             prompt = (f"{self.style}\n\nA single cut-out character/prop for animation on a perfectly flat, solid pure green "
@@ -96,14 +101,19 @@ class ShotSet:
         tag.write_text(key)
         return "generated"
 
-    def _variant(self, sid, name, prompt, force):
+    def _variant(self, sid, name, prompt, force, face=None):
         base = self.base(sid)
         out = self.variant(sid, name)
         full = (f"{prompt} Keep the exact same composition, framing, background, lighting, colours and every other "
                 f"character exactly as they are.")
-        st = self._gen(full, [base], out, "9:16", force, extra=hashlib.sha1(base.read_bytes()).hexdigest())
-        make_mask(base, out, self.mask(sid, name))
-        return st
+        key = hashlib.sha1(base.read_bytes()).hexdigest()
+        st = self._gen(full, [base], out, "9:16", force, extra=key)
+        for attempt in range(1, 3):
+            if make_mask(base, out, self.mask(sid, name), "talk" if name.startswith("talk_") else "head", face):
+                return st + ("" if attempt == 1 else f" (retry {attempt - 1})")
+            st = self._gen(full, [base], out, "9:16", True, extra=key + str(attempt))
+        ok = make_mask(base, out, self.mask(sid, name), "talk" if name.startswith("talk_") else "head", face)
+        return st + (" ok after retries" if ok else " REJECTED (mouth stays still)")
 
     def _sprite(self, prompt, refs, sid, force):
         raw = self.out / "sprites" / f"{sid}_green.png"
@@ -130,30 +140,74 @@ def _safe(fn):
 
 # ── image helpers ────────────────────────────────────────────
 
-def make_mask(base: Path, var: Path, out: Path) -> None:
-    """Soft mask covering only the area that changed (e.g. a mouth), so a variant
-    can be blended over the base without any other drift showing."""
-    a = np.asarray(Image.open(base).convert("RGB").resize((384, 672)), dtype=np.float32)
-    b = np.asarray(Image.open(var).convert("RGB").resize((384, 672)), dtype=np.float32)
+def align(base: Path, var: Path) -> np.ndarray:
+    """Line the variant up with the base picture (the model often shifts or rescales
+    the whole image slightly). Returns the variant warped onto the base, as RGB."""
+    import cv2
+    a = np.asarray(Image.open(base).convert("RGB"))
+    b = np.asarray(Image.open(var).convert("RGB").resize((a.shape[1], a.shape[0])))
+    ga, gb = cv2.cvtColor(a, cv2.COLOR_RGB2GRAY), cv2.cvtColor(b, cv2.COLOR_RGB2GRAY)
+    orb = cv2.ORB_create(4000)
+    ka, da = orb.detectAndCompute(ga, None)
+    kb, db = orb.detectAndCompute(gb, None)
+    if da is None or db is None:
+        return b
+    matches = cv2.BFMatcher(cv2.NORM_HAMMING, crossCheck=True).match(db, da)
+    if len(matches) < 30:
+        return b
+    src = np.float32([kb[m.queryIdx].pt for m in matches])
+    dst = np.float32([ka[m.trainIdx].pt for m in matches])
+    M, inl = cv2.estimateAffinePartial2D(src, dst, method=cv2.RANSAC, ransacReprojThreshold=2.0)
+    if M is None:
+        return b
+    return cv2.warpAffine(b, M, (a.shape[1], a.shape[0]), flags=cv2.INTER_CUBIC, borderMode=cv2.BORDER_REPLICATE)
+
+
+def make_mask(base: Path, var: Path, out: Path, kind: str = "talk", face=None) -> bool:
+    """Align the variant, then build a small soft mask over the one spot that
+    changed (the mouth). Writes <variant>_aligned.png and the mask. Returns False
+    (and writes no mask) if the variant changed more than that one spot."""
+    a = np.asarray(Image.open(base).convert("RGB"), dtype=np.float32)
+    b = align(base, var).astype(np.float32)
+    h, w = a.shape[:2]
     d = np.abs(a - b).sum(axis=2)
-    d = np.asarray(Image.fromarray(d.clip(0, 255).astype(np.uint8)).filter(ImageFilter.GaussianBlur(6)), dtype=np.float32)
-    thr = max(25.0, np.percentile(d, 99.0) * 0.5)
-    hot = d > thr
-    if hot.sum() == 0:
-        m = np.zeros_like(d)
+    ds = np.asarray(Image.fromarray(d.clip(0, 255).astype(np.uint8)).filter(ImageFilter.GaussianBlur(5)), dtype=np.float32)
+    if face is not None:  # only look for the change around this speaker's face
+        fx, fy = int(face[0] * w), int(face[1] * h)
+        lim = np.zeros_like(ds)
+        lim[max(0, fy - int(h * 0.08)): fy + int(h * 0.08), max(0, fx - int(w * 0.13)): fx + int(w * 0.13)] = 1
+        ds = ds * lim
+    cy, cx = np.unravel_index(np.argmax(ds), ds.shape)
+    # mouth-sized window around the strongest change (head-sized for eye/head variants)
+    rx, ry = (int(w * 0.12), int(h * 0.07)) if kind == "talk" else (int(w * 0.16), int(h * 0.10))
+    hot = ds > max(30.0, ds[cy, cx] * 0.25)
+    win = np.zeros_like(hot)
+    win[max(0, cy - ry): cy + ry, max(0, cx - rx): cx + rx] = True
+    region = hot & win
+    m = np.zeros((h, w), np.uint8)
+    if region.any():
+        ys, xs = np.nonzero(region)
+        pad = int(w * 0.02)
+        m[max(0, ys.min() - pad): ys.max() + pad, max(0, xs.min() - pad): xs.max() + pad] = 255
+    # quality check: does the area just around the patch line up with the base?
+    # (changes elsewhere don't matter, only the patch is pasted)
+    inner = np.asarray(Image.fromarray(m).filter(ImageFilter.MaxFilter(9)))
+    outer = np.asarray(Image.fromarray(m).filter(ImageFilter.MaxFilter(41)))
+    ring = (outer > 0) & (inner == 0)
+    seam = float(d[ring].mean()) if ring.any() else 999.0
+    outside = seam / 765
+    ok = bool(region.any()) and seam < 30.0
+    aligned = out.with_name(out.name.replace("_mask.png", "_aligned.png"))
+    rej = out.with_name(out.name.replace("_mask.png", "_rejected.txt"))
+    if ok:
+        Image.fromarray(b.astype(np.uint8)).save(aligned)
+        Image.fromarray(m).filter(ImageFilter.GaussianBlur(int(w * 0.008) + 1)).save(out)
+        rej.unlink(missing_ok=True)
     else:
-        # keep the densest blob: the window around the strongest change
-        ys, xs = np.nonzero(hot)
-        cy, cx = np.unravel_index(np.argmax(d), d.shape)
-        near = (np.abs(ys - cy) < 90) & (np.abs(xs - cx) < 90)
-        ys, xs = ys[near], xs[near]
-        m = np.zeros_like(d)
-        y0, y1 = max(0, ys.min() - 14), min(d.shape[0], ys.max() + 14)
-        x0, x1 = max(0, xs.min() - 14), min(d.shape[1], xs.max() + 14)
-        m[y0:y1, x0:x1] = 255
-    img = Image.fromarray(m.astype(np.uint8)).filter(ImageFilter.GaussianBlur(8))
-    w, h = Image.open(base).size
-    img.resize((w, h)).save(out)
+        out.unlink(missing_ok=True)
+        aligned.unlink(missing_ok=True)
+        rej.write_text(f"seam mismatch {seam:.1f}\n")
+    return ok
 
 
 def chroma_key(src: Path, dst: Path) -> None:

@@ -92,9 +92,13 @@ def synthesize(cfg: dict, episode: int, speaker: str, text: str, say: str | None
         lead = max(0.0, lead - 0.03)
         spoken = _text_start(alignment)
         if spoken is not None:  # cut anything said before the real words (e.g. a spoken [tag])
-            lead = max(lead, spoken - 0.06)
+            lead = max(lead, spoken - 0.15)
         tail = min(len(data) / audio_io.SR, tail + 0.12)
         data = data[int(lead * audio_io.SR): int(tail * audio_io.SR)]
+        fade = min(len(data), int(0.03 * audio_io.SR))  # tiny fades, no clicks
+        if fade:
+            data[:fade] *= np.linspace(0, 1, fade)
+            data[-fade:] *= np.linspace(1, 0, fade)
         peak = np.abs(data).max() or 1
         data = data / peak * 0.89
         audio_io.write_wav(final, data)

@@ -47,7 +47,8 @@ def setup(ep_dir, tl, preview=False):
         _img[sid] = _load_rgb(_shots.base(sid))
         names = list((sh.get("variants") or {}).keys()) + [f"talk_{k}" for k in (sh.get("talk") or {})]
         for n in names:
-            v, m = _shots.variant(sid, n), _shots.mask(sid, n)
+            m = _shots.mask(sid, n)
+            v = m.with_name(m.name.replace("_mask.png", "_aligned.png"))
             if v.exists() and m.exists():
                 _img[f"{sid}__{n}"] = _load_layer(v, m)
     for sp in spec.get("sprites", []):
@@ -255,7 +256,7 @@ class Lads(Player):
         return 0.0
 
     def extra(self, x, sh, st, en, m):
-        if sh["id"] != "l_road":
+        if sh["id"] != "l_kai":
             return
         p = x.m("pass")
         k = (x.t - p.start + 0.2) / (p.dur + 0.4)
