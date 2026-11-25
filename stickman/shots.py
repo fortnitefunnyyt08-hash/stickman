@@ -90,8 +90,10 @@ class ShotSet:
 
     def _copy(self, src, dst):
         dst.parent.mkdir(parents=True, exist_ok=True)
-        if not dst.exists() or dst.stat().st_mtime < src.stat().st_mtime:
+        if not dst.exists() or dst.read_bytes() != src.read_bytes():
             shutil.copy(src, dst)
+            for old in dst.parent.glob(dst.stem + "__*"):   # variants of a previous picture
+                old.unlink()
         return "copied"
 
     def _gen(self, prompt, refs, out, aspect, force, extra=""):
@@ -109,7 +111,10 @@ class ShotSet:
         full = (f"{prompt} Keep the exact same composition, framing, background, lighting, colours and every other "
                 f"character exactly as they are.")
         key = hashlib.sha1(base.read_bytes()).hexdigest()
-        if self.retry_rejected and self.mask(sid, name).with_name(self.mask(sid, name).name.replace("_mask.png", "_rejected.txt")).exists():
+        rejected = self.mask(sid, name).with_name(self.mask(sid, name).name.replace("_mask.png", "_rejected.txt"))
+        if rejected.exists() and out.exists():
+            if not self.retry_rejected:
+                return "rejected earlier (mouth stays still; --retry-rejected to try again)"
             force = True
         st = self._gen(full, [base], out, "9:16", force, extra=key)
         for attempt in range(1, 3):
