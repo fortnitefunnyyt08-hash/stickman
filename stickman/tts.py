@@ -22,6 +22,7 @@ from .config import BUILD, pitch_for, voice_for
 
 CACHE = BUILD / "cache" / "tts"
 WORD_RE = re.compile(r"\S+")
+TRIM_VERSION = 5   # bump when trimming changes so cached lines are re-cut
 
 
 @dataclass
@@ -77,7 +78,7 @@ def synthesize(cfg: dict, episode: int, speaker: str, text: str, say: str | None
         raw_audio, alignment = _espeak_raw(say, ph, raw_key), None
         backend = "placeholder"
 
-    final = CACHE / f"{raw_key}_p{pitch:+.2f}_{formant}.wav"
+    final = CACHE / f"{raw_key}_p{pitch:+.2f}_{formant}_t{TRIM_VERSION}.wav"
     meta = final.with_suffix(".json")
     if not (final.exists() and meta.exists()):
         filt = None
@@ -88,17 +89,18 @@ def synthesize(cfg: dict, episode: int, speaker: str, text: str, say: str | None
         audio_io.to_wav(raw_audio, tmp, extra_filters=filt)
         data = audio_io.read_wav(tmp)
         tmp.unlink()
-        lead, tail = audio_io.trim_silence_bounds(data)
-        lead = max(0.0, lead - 0.03)
+        lead, tail = audio_io.trim_silence_bounds(data, thresh=0.006)
+        lead = max(0.0, lead - 0.08)
         spoken = _text_start(alignment)
         if spoken is not None:  # cut anything said before the real words (e.g. a spoken [tag])
-            lead = max(lead, spoken - 0.15)
-        tail = min(len(data) / audio_io.SR, tail + 0.12)
+            lead = max(lead, _quiet_cut(data, spoken))
+        tail = min(len(data) / audio_io.SR, tail + 0.35)
         data = data[int(lead * audio_io.SR): int(tail * audio_io.SR)]
-        fade = min(len(data), int(0.03 * audio_io.SR))  # tiny fades, no clicks
+        fade = min(len(data), int(0.012 * audio_io.SR))  # tiny fades, no clicks
         if fade:
             data[:fade] *= np.linspace(0, 1, fade)
             data[-fade:] *= np.linspace(1, 0, fade)
+        data = np.concatenate([data, np.zeros(int(0.25 * audio_io.SR), dtype=data.dtype)])  # let the last word ring out
         peak = np.abs(data).max() or 1
         data = data / peak * 0.89
         audio_io.write_wav(final, data)
@@ -146,6 +148,25 @@ def _espeak_raw(say: str, ph: dict, key: str) -> Path:
                     "-s", str(ph.get("speed", 150)), "-w", str(out), text], check=True,
                    capture_output=True)
     return out
+
+
+def _quiet_cut(data: np.ndarray, spoken: float) -> float:
+    """Best place to cut before the first real word: the quietest 40ms in the
+    0.6s before it, so no fragment of anything said earlier slips in."""
+    sr = audio_io.SR
+    a, b = max(0, int((spoken - 0.6) * sr)), max(1, int((spoken - 0.02) * sr))
+    seg = np.abs(data[a:b])
+    if len(seg) < int(0.05 * sr):
+        return max(0.0, spoken - 0.1)
+    win = int(0.04 * sr)
+    energy = np.convolve(seg, np.ones(win) / win, mode="valid")
+    i = int(np.argmin(energy[::-1]))          # prefer the latest quiet spot
+    return (a + len(energy) - 1 - i + win // 2) / sr
+
+
+def ends_abruptly(path: Path) -> bool:
+    d = np.abs(audio_io.read_wav(path))
+    return d[-int(0.15 * audio_io.SR):-int(0.03 * audio_io.SR)].max() > 0.03
 
 
 def _text_start(alignment) -> float | None:

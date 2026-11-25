@@ -42,68 +42,67 @@ shots:
   - id: b_sit
     scene: birth
     from: sit
-    refs: [bg:bedroom_v2, char:kai_vest]
+    faces: {kai: [0.4, 0.62]}
+    refs: [shot:b_wide, char:kai_vest]
     prompt: >-
-      This bedroom. The cartoon stickman character KAI from the reference sheet (round white head,
-      curly tuft, white t-shirt vest over his nappy) sits on the carpet in the foreground, eyes wide and confused, looking
-      around the grim room. The mattress, mould and rainy window are behind him. Wholesome
-      family-friendly cartoon.
+      Same room, same lighting and the same characters in the same places as in the first reference picture (the master shot). Keep MAM on the mattress against the wall in her pink dressing gown under the pale blue sheet, and the MIDWIFE in blue scrubs kneeling on the carpet, unless told otherwise. Wholesome family-friendly cartoon. Now KAI (the small white toddler stickman in a white t-shirt vest with a curly tuft, from the
+      Kai reference sheet) sits on the carpet in the foreground, eyes wide and confused, looking around
+      the grim room. Mam and the midwife are behind him.
     variants:
       up: "Same picture, change only Kai's eyes: he is looking up at the mould on the ceiling, unimpressed. Everything else identical."
       window: "Same picture, change only Kai's head and eyes: he is looking sideways at the rainy window, unimpressed. Everything else identical."
-    move: [[0.5, 0.6, 1.0], [0.5, 0.55, 1.12]]
+    move: [[0.5, 0.6, 1.0], [0.5, 0.58, 1.1]]
 
   - id: b_face
     scene: birth
-    faces: {kai: [0.62, 0.55]}   # where each speaker's face is (0..1)
     from: hold
-    refs: [char:kai_vest, bg:bedroom_v2]
+    faces: {kai: [0.5, 0.5]}
+    refs: [shot:b_wide, char:kai_vest]
     prompt: >-
-      Close-up of KAI's face and shoulders in his white t-shirt vest, sitting on the carpet in the grim bedroom
-      (blurred background). Utterly defeated, dead-eyed, heavy half-closed eyelids, mouth closed in
-      a flat line, like a tired 40-year-old man realising where he is.
+      Close-up of KAI (from the Kai reference sheet) sitting on the carpet in this bedroom in his white t-shirt vest: his face and
+      shoulders fill the lower middle of the frame. Utterly defeated, dead-eyed, heavy half-closed
+      eyelids, mouth closed in a flat line. Behind him, softly blurred, MAM is still on the mattress and
+      the MIDWIFE is still kneeling. Wholesome family-friendly cartoon.
     talk: {kai: "Same cartoon picture, change only the character's mouth so it is open as if talking. Everything else identical."}
-    move: [[0.5, 0.45, 1.0], [0.5, 0.42, 1.12]]
+    move: [[0.5, 0.5, 1.0], [0.5, 0.48, 1.1]]
 
   - id: b_scrabble
     scene: birth
-    faces: {kai: [0.23, 0.52]}   # where each speaker's face is (0..1)
     from: turn
-    refs: [bg:bedroom_v2, char:kai_vest, char:mam]
+    faces: {kai: [0.3, 0.55]}
+    refs: [shot:b_wide, char:kai_vest]
     prompt: >-
-      This bedroom. KAI in his white t-shirt vest stands on the carpet beside the mattress, one hand
-      on his hip, the other pointing back at the mattress, looking at the camera like an angry
-      customer demanding a refund at a returns desk. MAM, propped against the wall on the mattress
-      in her pink dressing gown under a pale blue blanket, ignores him and watches the TV.
-      Wholesome family-friendly cartoon.
+      Same room, same lighting and the same characters in the same places as in the first reference picture (the master shot). Keep MAM on the mattress against the wall in her pink dressing gown under the pale blue sheet, and the MIDWIFE in blue scrubs kneeling on the carpet, unless told otherwise. Wholesome family-friendly cartoon. Now KAI in his white t-shirt vest stands on the carpet beside the mattress, one hand on his hip,
+      the other pointing at the mattress, looking at the camera like an angry customer demanding a
+      refund. Mam ignores him and watches the TV; the midwife watches him, amused.
     talk: {kai: "Same cartoon picture, change only the small character's mouth so it is open as if talking. Everything else identical."}
-    move: [[0.5, 0.6, 1.1], [0.48, 0.62, 1.22]]
+    move: [[0.5, 0.6, 1.08], [0.48, 0.6, 1.18]]
 
   - id: b_mam
     scene: birth
-    faces: {mam: [0.37, 0.5]}   # where each speaker's face is (0..1)
     from: norefunds
-    refs: [bg:bedroom_v2, char:mam]
+    faces: {mam: [0.5, 0.42]}
+    refs: [shot:b_wide, char:mam]
     prompt: >-
-      Medium shot of MAM propped against the bedroom wall on the mattress in her pink dressing gown,
-      hair in a bun, lighting a cigarette with a plastic lighter, not even looking, eyes fixed on the
-      glowing TV, completely unbothered.
+      Close-up of MAM from this bedroom: propped against the bedroom wall on the mattress in her pink
+      dressing gown, hair in a bun, she fills most of the frame. She is lighting a cigarette with a
+      plastic lighter, not even looking, eyes fixed on the glowing TV, completely unbothered.
+      Wholesome family-friendly cartoon.
     talk: {mam: "Same picture, change only Mam's mouth: open mid-word, cigarette still in hand. Everything else identical."}
-    move: [[0.5, 0.45, 1.05], [0.5, 0.45, 1.15]]
+    move: [[0.5, 0.45, 1.0], [0.5, 0.45, 1.1]]
 
   - id: b_dangle
     scene: birth
-    faces: {kai: [0.65, 0.53]}   # where each speaker's face is (0..1)
     from: lift
-    refs: [bg:bedroom_v2, char:midwife, char:kai_vest]
+    faces: {kai: [0.65, 0.5]}
+    refs: [shot:b_wide, char:kai_vest, char:midwife]
     prompt: >-
-      This bedroom. Two separate characters: the MIDWIFE in blue scrubs stands on the left with one
-      arm stretched out to the right, and her hand pinches the top of KAI's nappy, lifting him up
-      off the floor. KAI is a separate small character hanging in the air from her hand on the
-      right, legs dangling, arms folded, glaring at the camera. Kai wears his own white t-shirt
-      vest, he does not wear scrubs. Wholesome family-friendly cartoon.
-    talk: {kai: "Same picture, change only Kai's mouth: open mid-word, muttering grumpily. Everything else identical."}
-    move: [[0.5, 0.45, 1.05], [0.5, 0.42, 1.2]]
+      Same room, same lighting and the same characters in the same places as in the first reference picture (the master shot). Keep MAM on the mattress against the wall in her pink dressing gown under the pale blue sheet, and the MIDWIFE in blue scrubs kneeling on the carpet, unless told otherwise. Wholesome family-friendly cartoon. Except now the MIDWIFE has stood up on the left and holds out one arm, her hand pinching the top
+      of KAI's nappy so he hangs in the air at her side. KAI, a separate small character in his own white
+      t-shirt vest, dangles with legs hanging and arms folded, glaring at the camera. MAM is still on the
+      mattress behind them, watching the TV.
+    talk: {kai: "Same cartoon picture, change only the small character's mouth so it is open as if talking. Everything else identical."}
+    move: [[0.5, 0.5, 1.05], [0.52, 0.48, 1.15]]
 
   # ── ERRAND ────────────────────────────────────────────────
   - id: e_wide
@@ -148,24 +147,22 @@ shots:
   - id: e_stare
     scene: errand
     from: stare
-    refs: [char:kai_vest, bg:living_room_v3]
+    refs: [shot:e_wide, char:kai_vest]
     prompt: >-
-      Extreme close-up of KAI in his car seat staring directly into the camera, deadpan,
-      eyebrows slightly raised, like Jim from The Office looking at the camera. Background softly
-      blurred living room.
-    move: [[0.5, 0.45, 1.0], [0.5, 0.45, 1.08]]
+      Same living room, same lighting and the same characters as in the first reference picture (the master shot): MAM stays slouched on the brown sofa in her pink dressing gown watching TV with a cigarette. Wholesome family-friendly cartoon. Close-up of KAI in his white t-shirt vest sitting in the red car seat, staring directly into the
+      camera, deadpan, eyebrows slightly raised, like Jim from The Office looking at the camera. MAM is
+      softly blurred on the sofa behind him.
+    move: [[0.5, 0.48, 1.0], [0.5, 0.48, 1.08]]
 
   - id: e_go
     scene: errand
     from: climb
     faces: {kai: [0.6, 0.6]}
-    refs: [bg:living_room_v3, char:kai_vest, char:mam]
+    refs: [shot:e_wide, char:kai_vest]
     prompt: >-
-      This living room. KAI in his white t-shirt vest stands on the patterned carpet in the
-      foreground next to the empty red car seat, holding a few coins in one hand, sighing with an
-      exasperated deadpan look. Behind him MAM in her pink dressing gown and hair bun is still
-      slouched on the brown sofa watching TV with a cigarette. Both characters clearly visible.
-      Wholesome family-friendly cartoon.
+      Same living room, same lighting and the same characters as in the first reference picture (the master shot): MAM stays slouched on the brown sofa in her pink dressing gown watching TV with a cigarette. Wholesome family-friendly cartoon. Now KAI in his white t-shirt vest has climbed out of the red car seat and stands on the carpet
+      in the foreground next to the empty seat, holding a few coins in one hand, sighing with an
+      exasperated deadpan look. MAM is still on the sofa behind him.
     talk: {kai: "Same cartoon picture, change only the small character's mouth so it is open as if talking. Everything else identical."}
     move: [[0.5, 0.6, 1.1], [0.5, 0.6, 1.0]]
 
@@ -281,14 +278,16 @@ shots:
 
   - id: o_cheers
     scene: offy
-    faces: {kai: [0.58, 0.45]}   # where each speaker's face is (0..1)
     from: cheers
-    refs: [bg:offy, char:kai_vest]
+    faces: {kai: [0.35, 0.5]}
+    refs: [shot:o_goon, char:kai_vest]
     prompt: >-
-      Medium shot of KAI standing on his crates at the counter holding a small blue plastic carrier
-      bag, giving a satisfied little nod.
-    talk: {kai: "Same picture, change only Kai's mouth: open mid-word. Everything else identical."}
-    move: [[0.5, 0.48, 1.05], [0.5, 0.48, 1.12]]
+      Same corner shop, same characters as this picture: KAI in his white t-shirt vest stands on his stack
+      of crates at the counter holding the small blue plastic carrier bag, giving a satisfied little nod.
+      TARIQ is still behind the counter, back to scrolling his phone. Both characters clearly visible.
+      Wholesome family-friendly cartoon.
+    talk: {kai: "Same cartoon picture, change only the small character's mouth so it is open as if talking. Everything else identical."}
+    move: [[0.5, 0.5, 1.05], [0.5, 0.5, 1.12]]
 
   - id: o_exit
     scene: offy

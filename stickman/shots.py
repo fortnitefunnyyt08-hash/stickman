@@ -64,21 +64,22 @@ class ShotSet:
             img = sh.get("image", {})
             if img.get("use", "").startswith("shot:"):   # reuse another shot's picture
                 src = self.base(img["use"].split(":", 1)[1])
-                yield 1, sid, (lambda src=src, sid=sid: self._copy(src, self.base(sid)))
+                yield 2, sid, (lambda src=src, sid=sid: self._copy(src, self.base(sid)))
             elif img.get("use"):
                 src = ref_path(img["use"])
                 yield 0, sid, (lambda src=src, sid=sid: self._copy(src, self.base(sid)))
             else:
-                refs = [ref_path(r) for r in sh.get("refs", [])]
+                refs = [self.base(r.split(":", 1)[1]) if r.startswith("shot:") else ref_path(r) for r in sh.get("refs", [])]
+                stage = 1 if any(r.startswith("shot:") for r in sh.get("refs", [])) else 0
                 prompt = f"{self.style}\n\n{sh['prompt'].strip()}"
-                yield 0, sid, (lambda p=prompt, r=refs, sid=sid: self._gen(p, r, self.base(sid), "9:16", sid in redo))
+                yield stage, sid, (lambda p=prompt, r=refs, sid=sid: self._gen(p, r, self.base(sid), "9:16", sid in redo))
             vars_ = dict(sh.get("variants", {}))
             for spk, p in (sh.get("talk") or {}).items():
                 vars_[f"talk_{spk}"] = p
             faces = sh.get("faces") or {}
             for name, p in vars_.items():
                 face = faces.get(name[5:]) if name.startswith("talk_") else (list(faces.values()) or [None])[0]
-                yield 1, f"{sid}__{name}", (lambda p=p, sid=sid, name=name, face=face: self._variant(sid, name, p, sid in redo, face))
+                yield 2, f"{sid}__{name}", (lambda p=p, sid=sid, name=name, face=face: self._variant(sid, name, p, sid in redo, face))
         for sp in self.spec.get("sprites", []):
             refs = [ref_path(r) for r in sp.get("refs", [])]
             prompt = (f"{self.style}\n\nA single cut-out character/prop for animation on a perfectly flat, solid pure green "
@@ -123,7 +124,7 @@ class ShotSet:
 
     def run(self, redo=(), log=print):
         jobs = list(self.jobs(redo))
-        for stage in (0, 1):
+        for stage in (0, 1, 2):
             todo = [(k, f) for s, k, f in jobs if s == stage]
             with ThreadPoolExecutor(6) as ex:
                 for k, res in zip([k for k, _ in todo], ex.map(lambda kf: _safe(kf[1]), todo)):
