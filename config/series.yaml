@@ -9,6 +9,7 @@ video:
   fps: 30
   crf: 20            # lower = better quality, bigger file
   preset: medium
+  frame_y: 0.56       # where the camera's focus point sits on screen (0.5 = centre)
 
 # ── Voices ───────────────────────────────────────────────────
 # voice_sample: the cleaned recording used to clone the voice (git-ignored).
@@ -72,7 +73,7 @@ style:
 captions:
   font: /usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf
   size: 92
-  y: 0.40                 # fraction of screen height (middle third)
+  y: 0.35                 # fraction of screen height (middle third)
   max_words: 3            # words on screen at once
   color: "#ffffff"
   highlight: "#ffd83d"
@@ -93,4 +94,4 @@ audio:
   ambience_gain: 0.45
   music_gain: 0.16
   duck: 0.45              # music/ambience level while someone is talking
-  line_gap: 0.25          # default seconds of silence after each line
+  line_gap: 0.15          # default seconds of silence after each line

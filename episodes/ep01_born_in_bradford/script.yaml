@@ -16,86 +16,86 @@ scenes:
   - id: cold_open
     background: estate
     ambience: [{name: rain, gain: 1.0}, {name: telly_muffled, gain: 0.35}]
-    titles: [{text: "BRADFORD. 4:12AM.", at: 0.7, until: 5.6, style: stamp}]
+    titles: [{text: "BRADFORD. 4:12AM.", at: 0.5, until: 4.7, style: stamp}]
     beats:
       - {pause: 1.5, id: open, sfx: [{name: dog_bark, at: 1.1}]}
       - {pause: 1.7, id: mid, sfx: [{name: car_alarm_far, gain: 0.5}, {name: dog_bark, at: 1.2, gain: 0.7}]}
-      - {pause: 2.8, id: push}
+      - {pause: 1.8, id: push}
 
   - id: birth
     background: bedroom
     ambience: [{name: rain_inside, gain: 0.7}, {name: telly_jeremy, gain: 0.55}]
     beats:
-      - {pause: 1.3, id: groan1, sfx: [mam_groan]}
+      - {pause: 0.9, id: groan1, sfx: [mam_groan]}
       - {speaker: midwife, text: "One more push, love!", id: push_line}
       - {pause: 0.7, id: groan2, sfx: [mam_groan_big]}
-      - {pause: 1.3, id: pop, sfx: [pop, {name: slide, at: 0.15}]}
-      - {pause: 0.9, id: sit}
-      - {pause: 3.4, id: look}
-      - {pause: 1.4, id: hold}
+      - {pause: 1.1, id: pop, sfx: [pop, {name: slide, at: 0.15}]}
+      - {pause: 0.7, id: sit}
+      - {pause: 2.6, id: look}
+      - {pause: 1.0, id: hold}
       - {speaker: kai, text: "...Fuck's sake.", say: "...Fuck's sake.", direction: "squeaky, utterly defeated", id: fs, gap: 0.6}
       - {speaker: kai, text: "I'm in Bradford.", say: "I'm in Bradford.", id: bradford, gap: 0.4}
       - {pause: 0.4, id: turn}
       - {speaker: kai, text: "Nah, nah, nah. Send us back. Wrong address, this.", say: "Nah, nah, nah. Send uz back. Wrong address, this.", id: sendback}
       - {speaker: mam, text: "Oi! No refunds, babe.", direction: "lighting a fag, not even looking", id: norefunds, sfx: [lighter]}
-      - {pause: 1.0, id: lift}
-      - {speaker: kai, text: "Should've stayed in. Were warm in there. Had me own room an' everything.", say: "Should've stayed in. Were warm in there. Ad me own room an' everythin'.", direction: muttering, id: mutter, gap: 0.9}
+      - {pause: 0.8, id: lift}
+      - {speaker: kai, text: "Should've stayed in. Were warm in there. Had me own room an' everything.", say: "Should've stayed in. Were warm in there. Ad me own room an' everythin'.", direction: muttering, id: mutter, gap: 0.5}
 
   - id: errand
     background: living_room
     ambience: [{name: telly_jeremy, gain: 0.45}, {name: rain_inside, gain: 0.35}]
-    titles: [{text: "ONE HOUR LATER", at: 0.0, until: 1.6, style: card}]
+    titles: [{text: "ONE HOUR LATER", at: 0.0, until: 1.3, style: card}]
     beats:
-      - {pause: 2.2, id: card, sfx: [{name: crisp_rustle, at: 1.8}]}
+      - {pause: 1.8, id: card, sfx: [{name: crisp_rustle, at: 1.8}]}
       - {speaker: mam, text: "Go t' shop for us, love. Twenty Lambert an' Butler.", say: "Go t' shop for uz, love. Twenty Lambert an' Butler.", id: goshop, sfx: [{name: coins_jingle, at: 0.2}]}
       - {speaker: kai, text: "Our mam. I'm one hour old.", say: "Ah mam. I'm one hour old.", id: onehour}
       - {speaker: mam, text: "An'? Your brother were goin' at two days.", say: "An'? Yer brother were goin' at two days.", id: brother}
-      - {pause: 1.8, id: stare}
-      - {pause: 1.6, id: climb, sfx: [sigh, {name: coins_jingle, at: 1.2}]}
-      - {speaker: kai, text: "Unbelievable, this.", id: unbelievable, gap: 0.6}
+      - {pause: 1.4, id: stare}
+      - {pause: 1.3, id: climb, sfx: [sigh, {name: coins_jingle, at: 1.2}]}
+      - {speaker: kai, text: "Unbelievable, this.", id: unbelievable, gap: 0.4}
 
   - id: waddle
     background: street
     ambience: [{name: rain, gain: 0.8}]
     beats:
-      - {pause: 2.0, id: walk1}
+      - {pause: 2.4, id: walk1}
       - {speaker: kai, text: "Alright.", say: "Aright.", id: alright_kai, gap: 0.15}
       - {speaker: pasty_lad, text: "Alright.", say: "Aright.", id: alright_lad}
-      - {pause: 3.2, id: walk2, sfx: [{name: pigeon, at: 0.8}]}
+      - {pause: 2.2, id: walk2, sfx: [{name: pigeon, at: 0.8}]}
 
   - id: offy
     background: offy
     ambience: [{name: fridge_hum, gain: 0.6}, {name: rain_inside, gain: 0.25}]
     beats:
-      - {pause: 0.9, id: enter, sfx: [door_ding]}
+      - {pause: 0.6, id: enter, sfx: [door_ding]}
       - {speaker: tariq, text: "Twenty Lambert an' Butler, is it?", direction: "still scrolling, totally flat", id: twenty}
-      - {pause: 2.4, id: climb}
+      - {pause: 1.9, id: climb}
       - {speaker: kai, text: "Yeah, mush.", say: "Yeah, mush.", id: yeahmush}
-      - {pause: 2.6, id: slam, sfx: [coin_slam]}
+      - {pause: 2.2, id: slam, sfx: [coin_slam]}
       - {speaker: tariq, text: "You're thirty pence short, mate.", id: short}
       - {speaker: kai, text: "Put it on t' tab.", id: tab}
       - {speaker: tariq, text: "You were born this mornin'. You haven't got a tab.", id: born}
       - {speaker: kai, text: "Start one, then.", id: startone}
-      - {pause: 2.2, id: stare, sfx: [{name: sigh_tariq, at: 1.5}, {name: slide_pack, at: 1.9}]}
+      - {pause: 1.9, id: stare, sfx: [{name: sigh_tariq, at: 1.2}, {name: slide_pack, at: 1.6}]}
       - {speaker: tariq, text: "...Go on. Tell your mam she owes me.", say: "...Go on. Tell yer mam she owes me.", id: goon}
       - {speaker: kai, text: "Cheers, mush. Sound.", id: cheers}
-      - {pause: 2.0, id: exit, sfx: [{name: door_ding, at: 1.6}]}
+      - {pause: 1.6, id: exit, sfx: [{name: door_ding, at: 1.3}]}
 
   - id: lads
     background: shop_front
     ambience: [{name: rain, gain: 0.8}]
     beats:
-      - {pause: 1.0, id: step}
-      - {pause: 2.0, id: build, sfx: [bikes_pass]}
-      - {pause: 4.2, id: pass}
-      - {pause: 1.4, id: fade, sfx: [{name: car_alarm_near, at: 0.3}]}
-      - {pause: 1.6, id: turn}
-      - {speaker: kai, text: "Well.", direction: "sighing, resigned", id: well, gap: 0.8}
+      - {pause: 0.6, id: step}
+      - {pause: 1.5, id: build, sfx: [bikes_pass]}
+      - {pause: 3.4, id: pass}
+      - {pause: 1.1, id: fade, sfx: [{name: car_alarm_near, at: 0.3}]}
+      - {pause: 1.2, id: turn}
+      - {speaker: kai, text: "Well.", direction: "sighing, resigned", id: well, gap: 0.6}
       - {speaker: kai, text: "Better get down t' Job Centre an' get some pennies in.", say: "Better get down t' Job Centre an' get some pennies in.", id: jobcentre}
-      - {pause: 3.0, id: leave}
+      - {pause: 2.2, id: leave}
 
   - id: end_card
     background: end_card
     ambience: [{name: rain, gain: 0.4}]
     beats:
-      - {pause: 5.0, id: card}
+      - {pause: 4.0, id: card}

@@ -14,6 +14,10 @@ import skia
 
 def hexc(s: str, a: int = 255) -> int:
     s = s.lstrip("#")
+    if len(s) == 3:
+        s = "".join(ch * 2 for ch in s)
+    if len(s) == 8:
+        a = int(s[6:8], 16)
     return skia.Color(int(s[0:2], 16), int(s[2:4], 16), int(s[4:6], 16), a)
 
 
